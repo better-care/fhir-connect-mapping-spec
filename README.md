@@ -127,7 +127,7 @@ Context variables are meant to be of primitive type only, i.e. natively transfor
 
 Future versions of this spec could reflect support for further data like: language, committer, subject and so on.
 
-Terminologies and coding systems can be references by:
+Terminologies and coding systems can be referenced by:
 
 | System | Identifier |
 |--------|------------|
@@ -154,7 +154,7 @@ The internal mapping of data types:
 | STRING          | DV_TEXT       | true      | (direct)                                 |
 | DOSAGE          | NONE          | false     | (special)                                |
 
-The `nested` keyword indicates, a non-primitive case, where the final resulting structure is a nested structure, composed of multiple types. 
+The `nested` keyword indicates a non-primitive case, where the final resulting structure is a nested structure, composed of multiple types. 
 
 A simple `QUANTITY` example is illustrated in the following code block.
 It implicitly maps the matching attributes (openEHR FLAT: `magnitude`, `value`; FHIR: `value`, `unit`) too.
@@ -168,7 +168,7 @@ It implicitly maps the matching attributes (openEHR FLAT: `magnitude`, `value`; 
 ```
 
 `DOSAGE` is a one of the few ["special purpose data types"](http://hl7.org/fhir/datatypes.html) in FHIR and needs separate handling.
-Currently, it is the first custom class data type. 
+Currently, it is the first supported custom class data type. 
 As special type it needs to be declared with one extra step, to allow the mappings of its attributes (see formal description at [Class Mappings](#class-mappings)).
 It can be utilized in the following way:
 
@@ -255,7 +255,7 @@ They are identified by **not** having a `fhirConfig` section.
 
 Dependent mappings never can have a `condition`.
 
-The following **concrete** Dependent Mapping subclasses are existing:
+The following **concrete** Dependent Mapping subclasses exist:
 
 #### Slot Targets
 
