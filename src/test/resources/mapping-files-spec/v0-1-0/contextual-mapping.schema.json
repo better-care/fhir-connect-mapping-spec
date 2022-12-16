@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://schema.better.care/fhirconnect/contextual/0.1.0/contextual-mapping-schema",
+  "description": "Contextual Mapping schema for file format v0.1.0",
+  "title": "Contextual Mapping",
+  "type": "object",
+  "properties": {
+    "format": {
+      "type": "string"
+    },
+    "openEHR": {
+      "$ref": "#/$defs/openEHR"
+    },
+    "fhir": {
+      "$ref": "#/$defs/fhir"
+    }
+  },
+  "required": [
+    "fhir",
+    "format",
+    "openEHR"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "fhir": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "resourceType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "resourceType"
+      ],
+      "title": "FHIR"
+    },
+    "openEHR": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "templateId": {
+          "type": "string"
+        },
+        "archetypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "archetypes",
+        "templateId"
+      ],
+      "title": "openEHR"
+    }
+  }
+}
