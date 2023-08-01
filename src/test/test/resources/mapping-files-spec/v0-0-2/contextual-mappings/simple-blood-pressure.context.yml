@@ -1,0 +1,16 @@
+# Instance/Context related mapping of concepts.
+
+# In this case, a simple example mapping a wrapper template to a FHIR resource.
+
+format: "0.0.2"   # Version of format, to catch invalid older iterations during quick early development. Will get stable at some point, of course.
+
+openEHR:
+  templateId: "simple-encounter-blood-pressure.v0"
+  # List of archetypes contained in that template. A unique set of Archetypes must have only one unique instance mapping at max.
+  # WIP Note: This could be calculated at runtime, but only with major implications on performance. In contrast, calculating at design time is a one-time single effort.
+  archetypes:
+    # This list could be computed by the (GUI) tooling, which will help to create these mappings.
+    - "openEHR-EHR-OBSERVATION.blood_pressure.v2"
+
+fhir:
+  resourceType: "Observation"

@@ -1,0 +1,15 @@
+format: "0.1.0"
+version: "0.0.1"
+
+# No fhirConfig, because this model has no direct Resource equivalent in FHIR. It can only be used in openEHR Archetype slots.
+
+openEhrConfig:
+  archetype: "openEHR-EHR-CLUSTER.therapeutic_direction.v1"
+
+mappings:
+  - name: "dosage"
+    with:
+      fhir: "$fhirResource.dosageInstruction"
+      openehr: "$openEhrArchetype.dosage"
+      type: "NONE"
+    slotArchetype: "openEHR-EHR-CLUSTER.dosage.v1"                   # acts as link to Model Mapping of given Archetype

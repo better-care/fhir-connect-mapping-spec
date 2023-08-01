@@ -1,0 +1,27 @@
+format: "0.2.0"
+version: "0.0.1"
+
+fhirConfig:
+  # For this Resource: https://www.hl7.org/fhir/observation-example-body-height.json.html
+  resource: "Observation"
+openEhrConfig:
+  # For this Archetype: https://ckm.openehr.org/ckm/archetypes/1013.1.3210
+  archetype: "openEHR-EHR-OBSERVATION.height.v2"
+
+mappings:
+  - name: "height"
+    with:
+      fhir: "$fhirResource.value"
+      openehr: "$openEhrArchetype.height_length.any_event.height_length"
+      type: "QUANTITY"
+    condition:
+      targetRoot: "$fhirResource"
+      targetAttribute: "$fhirResource.code.coding.code"
+      operator: "one of"
+      criteria: "[$loinc.8302-2]"
+      identifying: true
+  - name: "time"
+    with:
+      fhir: "$fhirResource.effective"
+      openehr: "$openEhrArchetype.height_length.any_event.time"
+      type: "DATETIME"

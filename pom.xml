@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>care.better</groupId>
     <artifactId>fhir-connect-mapping-spec</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.2.0</version>
     <name>fhir-connect-mapping-spec</name>
     <description>fhir-connect-mapping-spec</description>
     <properties>
@@ -46,9 +46,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.erosb</groupId>
-            <artifactId>everit-json-schema</artifactId>
-            <version>1.14.1</version>
+            <groupId>com.networknt</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>1.0.86</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

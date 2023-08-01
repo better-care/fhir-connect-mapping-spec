@@ -1,0 +1,52 @@
+# Listing of one bi-directional model mapping.
+
+# General philosophy: The reading direction of those mappings is FHIR->openEHR, because
+# openEHR is more descriptive, due to its "maximal modeling" approach. All ambiguities
+# regarding the bi-directionality will be handled by the program/code.
+
+version: "0.0.2"
+format: "0.1.0"   # Version of format, to catch invalid older iterations during quick early development. Will get stable at some point, of course.
+
+# Configuration of contexts.
+fhirConfig:
+  # For this example: http://hl7.org/fhir/observation-example-bloodpressure.json.html
+  resource: "Observation"
+openEhrConfig:
+  # For this example: https://ckm.openehr.org/ckm/archetypes/1013.1.3574
+  archetype: "openEHR-EHR-OBSERVATION.blood_pressure.v2"
+
+# Actual mapping points:
+mappings:
+  # Each mapping has a unique (self documenting) name.
+  - name: "patient"
+    # A simple mapping, which maps one attribute to another.
+    with:
+      # Access the FHIR resource, either in input or output direction.
+      fhir: "$fhirResource.subject.reference"
+      # Some context variable are necessary to be accessible from the mapping.
+      openehr: "$openEhrContext.$ehr"
+      type: "STRING"
+
+  # Another mapping which maps on a met condition. This condition is used to identify
+  # the correct "component" in the FHIR resource (array).
+  - name: "systolic"
+    with:
+      fhir: "$fhirResource.component.value"
+      openehr: "$openEhrArchetype.blood_pressure.any_event.systolic"
+      type: "QUANTITY"
+    condition:
+      # One of the codings has to be the matching LOINC or SNOMED code.
+      # incl. implicit handling of arrays, as ".coding" is a set of codings.
+      # -> Here the backwards direction is ambiguous. The program will interpret "one of"
+      # as "put those in the target resource" if the direction is openEHR->FHIR.
+      targetRoot: "$fhirResource.component"                       # Scope of object for 'condition'
+      targetAttribute: "code.coding.code"                         # Actual attribute to check for 'condition'
+      operator: "one of"
+      criteria: "[$loinc.8480-6, $snomed.271649006]"
+      identifying: true                                           # The *one* condition able to identify FHIR input to match this mapping
+
+# The real mapping would continue to map:
+# - performer
+# - diastolic
+# - clinical interpretation
+# - body site

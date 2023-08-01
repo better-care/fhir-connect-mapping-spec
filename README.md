@@ -124,6 +124,7 @@ Here, the openEHR execution environment - with `$openEhrContext` as root and ava
 | `$ehr`          | EHR ID of request's context |
 
 Context variables are meant to be of primitive type only, i.e. natively transformable to String, to avoid cross-type compatibility problems.
+Additionally, due to overlapping data types (see [Data Types](#data-types)), context variables can only have non-overlapping types. Because they have no openEHR modeling information to infer the specific type from.
 
 Future versions of this spec could reflect support for further data like: language, committer, subject and so on.
 
@@ -144,19 +145,21 @@ Data types, such as `DV_QUANTITY`, `DV_TEXT` and so on, and their FHIR counterpa
 
 The internal mapping of data types:
 
-| Type ID / FHIR  | openEHR       | Primitive | "FLAT / FHIR" Attributes Pairs           |
-|-----------------|---------------|-----------|------------------------------------------|
-| NONE            | NONE          | false     | /                                        |
-| QUANTITY        | DV_QUANTITY   | true      | magnitude / value <br/> unit / unit      |
-| DATETIME        | DV_DATE_TIME  | true      | (direct)                                 |
-| CODEABLECONCEPT | DV_CODED_TEXT | false     | **_nested_** / coding <br/> value / text |
-| CODING          | CODE_PHRASE   | true      | code / code <br/> terminology / system   |
-| STRING          | DV_TEXT       | true      | (direct)                                 |
-| DOSAGE          | NONE          | false     | (special)                                |
+| Type ID / FHIR  | openEHR       | Primitive | "FLAT / FHIR" Attributes Pairs                       |
+|-----------------|---------------|-----------|------------------------------------------------------|
+| NONE            | NONE          | false     | /                                                    |
+| QUANTITY        | DV_QUANTITY   | true      | magnitude / value <br/> unit / unit                  |
+| QUANTITY        | DV_ORDINAL    | true      | ordinal / value <br/> value / unit <br/> code / code |
+| QUANTITY        | DV_COUNT      | true      | (direct)                                             |
+| DATETIME        | DV_DATE_TIME  | true      | (direct)                                             |
+| CODEABLECONCEPT | DV_CODED_TEXT | false     | **_nested_** / coding <br/> value / text             |
+| CODING          | CODE_PHRASE   | true      | code / code <br/> terminology / system               |
+| STRING          | DV_TEXT       | true      | (direct)                                             |
+| DOSAGE          | NONE          | false     | (special)                                            |
 
 The `nested` keyword indicates a non-primitive case, where the final resulting structure is a nested structure, composed of multiple types. 
 
-A simple `QUANTITY` example is illustrated in the following code block.
+A simple `QUANTITY`/`DV_QUANTITY` example is illustrated in the following code block.
 It implicitly maps the matching attributes (openEHR FLAT: `magnitude`, `value`; FHIR: `value`, `unit`) too.
 
 ```yaml
@@ -166,6 +169,13 @@ It implicitly maps the matching attributes (openEHR FLAT: `magnitude`, `value`; 
     openehr: "$openEhrArchetype.height_length.any_event.height_length"
     type: "QUANTITY"
 ```
+
+The Type ID `QUANTITY` also shows overlapping types.
+This is construct is necessary, because FHIR and openEHR have different paradigms on base data types.
+In Model Mappings, usage of `type: "QUANTITY"` would refer to either of the linked openEHR types (as per table above).
+Using the openEHR modeling information from the Template, the mapping engine can infer the correct type at the given path.
+It will select the matching supported type.
+For instance, in the case of `QUANTITY`, either one of `DV_QUANTITY`, `DV_ORDINAL`, or `DV_COUNT`.
 
 `DOSAGE` is a one of the few ["special purpose data types"](http://hl7.org/fhir/datatypes.html) in FHIR and needs separate handling.
 Currently, it is the first supported custom class data type. 
@@ -389,7 +399,7 @@ Mapping instances consist of:
 
 ### Format
 
-[Model Mapping JSON Schema](src/test/resources/mapping-files-spec/v0-1-0/model-mapping.schema.json)
+[Model Mapping JSON Schema](src/test/resources/mapping-files-spec/v0-2-0/model-mapping.schema.json)
 
 File extension: `*.model.yml` or `*.model.yaml`
 
@@ -436,7 +446,7 @@ The `fhir` configuration sets the resulting type. This can either be a `Bundle` 
 
 ### Format
 
-[Contextual Mapping JSON Schema](src/test/resources/mapping-files-spec/v0-1-0/contextual-mapping.schema.json)
+[Contextual Mapping JSON Schema](src/test/resources/mapping-files-spec/v0-2-0/contextual-mapping.schema.json)
 
 File extension: `*.context.yml` or `*.context.yaml`
 
@@ -495,6 +505,18 @@ To utilize JSON schema validation and autocompletion within YAML files check out
 - https://www.jetbrains.com/help/idea/json.html#ws_json_schema_add_custom
 
 ## Changelog
+
+### v0.2.0
+
+#### Added
+
+- DV_ORDINAL and DV_COUNT support
+
+#### Changed
+
+- Data types can be overlapping now
+- Context variables need non-overlapping types
+- Model Mapping schema: improved validation
 
 ### v0.1.0
 

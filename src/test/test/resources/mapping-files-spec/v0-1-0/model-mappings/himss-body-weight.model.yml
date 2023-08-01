@@ -1,0 +1,27 @@
+format: "0.1.0"
+version: "0.0.1"
+
+fhirConfig:
+  # For this Resource: https://www.hl7.org/fhir/observation-example.json.html
+  resource: "Observation"
+openEhrConfig:
+  # For this Archetype: https://ckm.openehr.org/ckm/archetypes/1013.1.2960
+  archetype: "openEHR-EHR-OBSERVATION.body_weight.v2"
+
+mappings:
+  - name: "weight"
+    with:
+      fhir: "$fhirResource.value"
+      openehr: "$openEhrArchetype.body_weight.any_event.weight"
+      type: "QUANTITY"
+    condition:
+      targetRoot: "$fhirResource"
+      targetAttribute: "$fhirResource.code.coding.code"
+      operator: "one of"
+      criteria: "[$loinc.29463-7, $snomed.27113001]"
+      identifying: true
+  - name: "time"
+    with:
+      fhir: "$fhirResource.effective"
+      openehr: "$openEhrArchetype.body_weight.any_event.time"
+      type: "DATETIME"

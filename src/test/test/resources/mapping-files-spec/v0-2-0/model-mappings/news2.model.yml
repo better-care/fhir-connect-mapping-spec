@@ -1,0 +1,42 @@
+format: "0.2.0"
+version: "0.0.1"
+
+fhirConfig:
+  # For this Resource: https://simplifier.net/guide/ClinicalObservations/NEWS2WithSubScoresObservationExample?version=current
+  resource: "Observation"
+openEhrConfig:
+  # For this Archetype: https://ckm.openehr.org/ckm/archetypes/1013.1.3342
+  archetype: "openEHR-EHR-OBSERVATION.news2.v1"
+
+mappings:
+  - name: "score"
+    with:
+      fhir: "$fhirResource.derivedFrom"
+      openehr: "$reference"   # the path of the following reference mapping will be used
+      type: "NONE"
+    # States the FHIR target/source is a Reference.
+    reference:
+      # Implicitly is a "direct" reference, i.e. creates ad-hoc sub-resource. It will be added to the Bundle and referenced in the root Resource.
+      resourceType: "Observation"
+      mappings:
+        - name: "Respiration Rate Score"
+          with:
+            fhir: "value"
+            openehr: "$openEhrArchetype.national_early_warning_score_2_news2.respiration_rate"
+            type: "QUANTITY"  # implicit DV_ORDINAL handling, because on FHIR-side it is a Quantity
+          condition:
+            targetRoot: "$fhirResource"
+            targetAttribute: "$fhirResource.code.coding.code"
+            operator: "one of"
+            criteria: "[$snomed.1104301000000104]"
+  - name: "National Early Warning Score 2 (NEWS2)"
+    with:
+      fhir: "$fhirResource.value"
+      openehr: "$openEhrArchetype.national_early_warning_score_2_news2.total_score"
+      type: "QUANTITY"  # implicit DV_COUNT handling, because on FHIR-side it is a Quantity
+    condition:
+      targetRoot: "$fhirResource"
+      targetAttribute: "$fhirResource.code.coding.code"
+      operator: "one of"
+      criteria: "[$snomed.1104051000000101]"
+      identifying: true

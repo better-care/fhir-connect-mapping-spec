@@ -1,0 +1,9 @@
+format: "0.1.0"
+
+openEHR:
+  templateId: "OPENeP - Inpatient Prescription"
+  archetypes:
+    - "openEHR-EHR-INSTRUCTION.medication_order.v2"
+
+fhir:
+  resourceType: "Bundle"
