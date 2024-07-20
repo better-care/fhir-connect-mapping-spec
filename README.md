@@ -208,7 +208,7 @@ Having one *identifying* `condition` for one Model Mapping is required.
 This is not the case for [Dependent Mappings](#dependent-mappings).
 
 The condition's `targetRoot` path points to the root element, which this evaluation should find (matching the condition).
-It most cases this root is a list.
+In most cases this root is a list.
 
 In contrast, the `targetAttribute` paths points to the attribute of the root objects the evaluation will be executed with.
 This path is always a direct child-path of the root.
