@@ -171,7 +171,7 @@ It implicitly maps the matching attributes (openEHR FLAT: `magnitude`, `value`; 
 ```
 
 The Type ID `QUANTITY` also shows overlapping types.
-This is construct is necessary, because FHIR and openEHR have different paradigms on base data types.
+This construct is necessary, because FHIR and openEHR have different paradigms on base data types.
 In Model Mappings, usage of `type: "QUANTITY"` would refer to either of the linked openEHR types (as per table above).
 Using the openEHR modeling information from the Template, the mapping engine can infer the correct type at the given path.
 It will select the matching supported type.
