@@ -1,3 +1,9 @@
+# DEPRECATION NOTICE
+
+As of 2024, Better Ltd. is no longer actively developing or moderating this specification. For the time being, this repository will not receive updates.
+
+We are pleased to see that our open-source proposal has sparked interest within the healthcare and research community, inspiring further development. To the best of our knowledge, the most up-to-date version can be found at https://github.com/SevKohler/FHIRconnect-spec.
+
 # Specification of FHIR Connect mapping files
 
 ## Purpose
